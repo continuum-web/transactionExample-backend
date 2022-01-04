@@ -1,7 +1,7 @@
 const pouchdb = require('pouchdb');
 const { v4: uuidv4 } = require('uuid');
+const db = require('./connection');
 
-const db = new pouchdb('transactions')
 const data = [
 	{
 		name: 'Ifeoma Wilder',
@@ -106,19 +106,16 @@ const data = [
 ];
 
 const formatted = data.map(person => {
-    const { name, email, balance } = person;
-    newPerson = { _id: uuidv4(), name, email, balance, transactions: [] };
-    return newPerson;
+	const { name, email, balance } = person;
+	newPerson = { _id: uuidv4(), name, email, balance, transactions: {} };
+	return newPerson;
 });
 
+formatted.forEach(person => {
+	db.put(person);
+});
 
-formatted.forEach((person) => {
-    db.put(person)
-}
-)
-
-
-//uncomment to check database is seeded
+// uncomment to check database is seeded
 // db.allDocs({
 // 	include_docs: true,
 // 	attachments: true,

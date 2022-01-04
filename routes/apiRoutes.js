@@ -1,7 +1,9 @@
 const apiRouter = require('express').Router();
-
+const usersRouter = require('./userRouter');
 apiRouter.get('/', (req, res) => {
 	res.status(200).send('Welcome to the API');
 });
 
-module.exports = apiRouter
+apiRouter.use('/users', usersRouter);
+
+module.exports = apiRouter;

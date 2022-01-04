@@ -6,7 +6,7 @@ const app = express();
 
 // for cross site calling
 app.use(cors());
-
+app.use(express.json());
 //A base route, every call to ip:port/api is first directed here
 app.use("/api", apiRouter)
 

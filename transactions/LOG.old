@@ -1,0 +1,5 @@
+2022/01/04-10:32:42.694 40ec Recovering log #6
+2022/01/04-10:32:42.694 40ec Level-0 table #8: started
+2022/01/04-10:32:42.704 40ec Level-0 table #8: 1002 bytes OK
+2022/01/04-10:32:42.711 40ec Delete type=0 #6
+2022/01/04-10:32:42.711 40ec Delete type=3 #4
