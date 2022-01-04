@@ -18,16 +18,13 @@ exports.getSingleUserDB = id => {
 	});
 };
 
-exports.addToBalance = (id, amount) => {
-	console.log(amount);
+exports.addToBalance = (id, amount, type) => {
 	return db
 		.get(id)
 		.then(doc => {
-			console.log(doc);
 			balance = parseInt(doc.balance);
 			doc.balance = balance + amount;
             newBalance = doc.balance + amount;
-            console.log(typeof doc.transactions);
 			doc.transactions[uuidv4()] = {
 				balance,
 				newBalance,
@@ -41,7 +38,33 @@ exports.addToBalance = (id, amount) => {
 			return db.get(id);
 		})
 		.then(doc => {
-			// console.log(doc);
 			return doc;
 		});
+};
+
+exports.removeFromBalance = (id, amount) => {
+    return db
+			.get(id)
+			.then(doc => {
+				console.log(doc);
+				balance = parseInt(doc.balance);
+				doc.balance = balance - amount;
+				newBalance = doc.balance - amount;
+				console.log(typeof doc.transactions);
+				doc.transactions[uuidv4()] = {
+					balance,
+					newBalance,
+					amount,
+					type: 'debit',
+				};
+
+				return db.put(doc);
+			})
+			.then(() => {
+				return db.get(id);
+			})
+			.then(doc => {
+				
+				return doc;
+			});
 };
