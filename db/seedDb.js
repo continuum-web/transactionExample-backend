@@ -2,6 +2,7 @@ const pouchdb = require('pouchdb');
 const { v4: uuidv4 } = require('uuid');
 const db = require('./connection');
 
+//This is random generated use data including name email address and a random balance between 0 and 100
 const data = [
 	{
 		name: 'Ifeoma Wilder',
@@ -105,12 +106,13 @@ const data = [
 	},
 ];
 
+//we then format the data, to include a random generates id using the uuidv4 library (The id (_id) is require by pouchDB), and adds the transaction history object 
 const formatted = data.map(person => {
 	const { name, email, balance } = person;
 	newPerson = { _id: uuidv4(), name, email, balance, transactions: {} };
 	return newPerson;
 });
-
+//once the data is formatted, we loop through each one and add it to the DB
 formatted.forEach(person => {
 	db.put(person);
 });

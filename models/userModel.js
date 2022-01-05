@@ -1,7 +1,9 @@
 const db = require('../db/connection');
 const { v4: uuidv4 } = require('uuid');
 
+//sends a request to the PouchDB database, this returns the entire database of users
 exports.getUsersDB = () => {
+	
 	return db
 		.allDocs({
 			include_docs: true,
@@ -11,13 +13,13 @@ exports.getUsersDB = () => {
 			return result.rows;
 		});
 };
-
+//This is the call to the PouchDB, to retrieve a single user and returns the result to the controller
 exports.getSingleUserDB = id => {
 	return db.get(id).then(result => {
 		return result;
 	});
 };
-
+//If the request id a POST, and a credit, this function is called, to add to the players balance, and add the transaction.
 exports.addToBalance = (id, amount, type) => {
 	return db
 		.get(id)
@@ -42,6 +44,7 @@ exports.addToBalance = (id, amount, type) => {
 		});
 };
 
+//If the request id a POST, and a debit, this function is called, to remove from the players balance, and add the transaction.
 exports.removeFromBalance = (id, amount) => {
     return db
 			.get(id)

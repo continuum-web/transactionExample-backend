@@ -5,6 +5,7 @@ const {
 	removeFromBalance,
 } = require('../models/userModel');
 
+// the controller to get users and reply to the Client
 exports.getUsers = (req, res, next) => {
 	const users = getUsersDB();
 	users.then(rows => {
@@ -13,8 +14,7 @@ exports.getUsers = (req, res, next) => {
 	});
 };
 
-//e5a00ad6-76ed-43c3-8f6e-446e4bd82800
-
+//This controller get the details of a single user
 exports.getSingleUser = (req, res, next) => {
 	let { userId } = req.params;
 
@@ -22,7 +22,7 @@ exports.getSingleUser = (req, res, next) => {
 		res.status(200).send(user);
 	});
 };
-
+//this is the controller to add and remove from the players balance
 exports.alterPlayerCredit = (req, res, next) => {
 	let { userId } = req.params;
     const { type, amount } = req.body;
