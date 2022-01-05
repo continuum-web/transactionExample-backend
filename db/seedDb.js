@@ -109,7 +109,7 @@ const data = [
 //we then format the data, to include a random generates id using the uuidv4 library (The id (_id) is require by pouchDB), and adds the transaction history object 
 const formatted = data.map(person => {
 	const { name, email, balance } = person;
-	newPerson = { _id: uuidv4(), name, email, balance, transactions: {} };
+	newPerson = { _id: uuidv4(), name, email, balance, transactions: [] };
 	return newPerson;
 });
 //once the data is formatted, we loop through each one and add it to the DB

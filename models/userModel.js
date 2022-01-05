@@ -1,15 +1,17 @@
 const db = require('../db/connection');
 const { v4: uuidv4 } = require('uuid');
+const res = require('express/lib/response');
+const { bulkDocs } = require('../db/connection');
 
 //sends a request to the PouchDB database, this returns the entire database of users
 exports.getUsersDB = () => {
-	
 	return db
 		.allDocs({
 			include_docs: true,
 			attachments: true,
 		})
 		.then(result => {
+			// console.log(result.rows)
 			return result.rows;
 		});
 };
@@ -26,13 +28,17 @@ exports.addToBalance = (id, amount, type) => {
 		.then(doc => {
 			balance = parseInt(doc.balance);
 			doc.balance = balance + amount;
-            newBalance = doc.balance + amount;
-			doc.transactions[uuidv4()] = {
-				balance,
-				newBalance,
-				amount,
-				type: 'credit',
-			};
+			newBalance = doc.balance + amount;
+			let newTransaction = [
+				...doc.transactions,
+				{
+					id: uuidv4(),
+					balance,
+					amount,
+					type: 'credit',
+				},
+			];
+			doc.transactions = newTransaction;
 
 			return db.put(doc);
 		})
@@ -46,28 +52,38 @@ exports.addToBalance = (id, amount, type) => {
 
 //If the request id a POST, and a debit, this function is called, to remove from the players balance, and add the transaction.
 exports.removeFromBalance = (id, amount) => {
-    return db
-			.get(id)
-			.then(doc => {
-				console.log(doc);
-				balance = parseInt(doc.balance);
-				doc.balance = balance - amount;
-				newBalance = doc.balance - amount;
-				console.log(typeof doc.transactions);
-				doc.transactions[uuidv4()] = {
+	return db
+		.get(id)
+		.then(doc => {
+			balance = parseInt(doc.balance);
+			newBalance = doc.balance - amount;
+			if (newBalance >= balance) {
+				doc.balance = newBalance
+			
+				let newTransaction = [...doc.transactions,
+				{
+					id: uuidv4(),
 					balance,
-					newBalance,
 					amount,
 					type: 'debit',
-				};
+				},
+				];
+				doc.transactions = newTransaction;
 
 				return db.put(doc);
-			})
-			.then(() => {
-				return db.get(id);
-			})
-			.then(doc => {
-				
-				return doc;
-			});
+			}
+			else { 
+				console.log('failed')
+				return Promise.reject({status:500, msg: 'insufficient funds'})
+			}
+		})
+		.then(() => {
+			return db.get(id);
+		})
+		.then(doc => {
+			return doc;
+		})
+		.catch(err => {
+			return err
+		});
 };

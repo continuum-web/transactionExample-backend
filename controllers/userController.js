@@ -9,7 +9,7 @@ const {
 exports.getUsers = (req, res, next) => {
 	const users = getUsersDB();
 	users.then(rows => {
-		console.log(rows);
+		// console.log(typeof rows);
 		res.status(200).send(rows);
 	});
 };
