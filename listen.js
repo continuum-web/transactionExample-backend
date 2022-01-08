@@ -4,4 +4,4 @@ const app = require('./app.js');
 const { PORT = 9090 } = process.env;
 
 //calls the app listener on the port number variable. when accessed returns "Hello World"
-app.listen(port, () => console.log(`running on port ${port}`));
+app.listen(port, () => console.log(`running on port ${PORT}`));
