@@ -4,11 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"devStart": "nodemon listen.js",
+		"start": "node listen.js",
 		"seedDB": "node ./db/seedDb.js"
-    
-	},
+    	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/continuum-web/transactionExample-backend.git"
