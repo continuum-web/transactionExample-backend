@@ -25,21 +25,16 @@ exports.getSingleUser = (req, res, next) => {
 //this is the controller to add and remove from the players balance
 exports.alterPlayerCredit = (req, res, next) => {
 	let { userId } = req.params;
-    const { type, amount } = req.body;
-   
-    if (type === "credit") { 
-        return addToBalance(userId, amount).then(user => {
-		// console.log(user);
-		res.status(200).send(user);
-	});
-    }
-    else if (type === 'debit') {
-			return removeFromBalance(userId, amount).then(user => {
-				res.status(200).send(user);
-			});
-		}
+	const { type, amount } = req.body;
 
-	
+	if (type === 'credit') {
+		return addToBalance(userId, amount).then(user => {
+			// console.log(user);
+			res.status(200).send(user);
+		});
+	} else if (type === 'debit') {
+		return removeFromBalance(userId, amount).then(user => {
+			res.status(200).send(user);
+		});
+	}
 };
-
-

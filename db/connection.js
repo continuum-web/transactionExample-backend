@@ -5,4 +5,4 @@ const db = new pouchdb('transactions');
 
 module.exports = db;
 
-//this file create the "connection" to the database
+//this file creates the "connection" to the database
