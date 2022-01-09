@@ -9,7 +9,7 @@ const {
 exports.getUsers = (req, res, next) => {
 	const users = getUsersDB();
 	users.then(rows => {
-		// console.log(typeof rows);
+		
 		res.status(200).send(rows);
 	});
 };
@@ -26,15 +26,22 @@ exports.getSingleUser = (req, res, next) => {
 exports.alterPlayerCredit = (req, res, next) => {
 	let { userId } = req.params;
 	const { type, amount } = req.body;
-
 	if (type === 'credit') {
+	
 		return addToBalance(userId, amount).then(user => {
-			// console.log(user);
+		
 			res.status(200).send(user);
 		});
-	} else if (type === 'debit') {
-		return removeFromBalance(userId, amount).then(user => {
-			res.status(200).send(user);
-		});
+	}
+	if (type === 'debit') {
+		
+		return removeFromBalance(userId, amount)
+			.then(user => {
+				res.status(200).send(user);
+			})
+			.catch(err => {
+				
+				res.status(err.status).send(err.msg);
+			});
 	}
 };

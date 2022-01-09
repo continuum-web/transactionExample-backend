@@ -11,7 +11,7 @@ exports.getUsersDB = () => {
 			attachments: true,
 		})
 		.then(result => {
-			// console.log(result.rows)
+			
 			return result.rows;
 		});
 };
@@ -28,11 +28,12 @@ exports.addToBalance = (id, amount, type) => {
 		.then(doc => {
 			balance = parseInt(doc.balance);
 			doc.balance = balance + parseInt(amount);
+			newBalance = balance + parseInt(amount);
 			let newTransaction = [
 				...doc.transactions,
 				{
 					id: uuidv4(),
-					balance,
+					balance:newBalance,
 					amount,
 					type: 'credit',
 				},
@@ -54,16 +55,18 @@ exports.removeFromBalance = (id, amount) => {
 	return db
 		.get(id)
 		.then(doc => {
+			
 			balance = parseInt(doc.balance);
 			newBalance = balance - parseInt(amount);
-			if (newBalance <= balance) {
+			
+			if (balance >= parseInt(amount)) {
 				doc.balance = newBalance;
 
 				let newTransaction = [
 					...doc.transactions,
 					{
 						id: uuidv4(),
-						balance,
+						balance:newBalance,
 						amount,
 						type: 'debit',
 					},
@@ -72,8 +75,8 @@ exports.removeFromBalance = (id, amount) => {
 
 				return db.put(doc);
 			} else {
-				console.log('failed');
-				return Promise.reject({ status: 500, msg: 'insufficient funds' });
+				
+				return Promise.reject({ status: 400, msg: 'insufficient funds' });
 			}
 		})
 		.then(() => {
@@ -82,7 +85,5 @@ exports.removeFromBalance = (id, amount) => {
 		.then(doc => {
 			return doc;
 		})
-		.catch(err => {
-			return err;
-		});
+		;
 };
